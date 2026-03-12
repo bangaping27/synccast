@@ -67,6 +67,10 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 	v1.GET("/version", h.getVersion)
 	v1.GET("/extension/download", h.downloadExtension)
 
+	// Serve Landing Page (at the root)
+	r.StaticFile("/", "./web/index.html")
+	r.Static("/assets", "./web/assets") 
+
 
 	// WS is public for now, but room access can be checked in serveWS
 	v1.GET("/ws/:room_id", h.serveWS)

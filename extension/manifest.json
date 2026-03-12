@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "SyncCast — Watch Together",
     "version": "1.0.1",
-    "description": "Watch YouTube together in perfect sync. Part of the Maja Ecosystem.",
+    "description": "Watch YouTube together in perfect sync.",
     "permissions": [
         "tabs",
         "storage",

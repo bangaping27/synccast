@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncCast — Watch Together in Perfect Sync</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Outfit:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --bg: #050510;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: rgba(255, 255, 255, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        /* ── Background Elements ── */
+        .blobs {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            border-radius: 50%;
+            opacity: 0.15;
+            animation: move 20s infinite alternate;
+        }
+
+        .blob-1 {
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 400px;
+            height: 400px;
+            background: #3b82f6;
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -5s;
+        }
+
+        @keyframes move {
+            from { transform: translate(0, 0) scale(1); }
+            to { transform: translate(100px, 50px) scale(1.1); }
+        }
+
+        /* ── Navbar ── */
+        nav {
+            padding: 2rem 10%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(to bottom right, var(--primary), #3b82f6);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        /* ── Hero ── */
+        .hero {
+            padding: 4rem 10% 10rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .badge {
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 8px 16px;
+            border-radius: 99px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #a78bfa;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 24px;
+            font-weight: 900;
+            letter-spacing: -2px;
+        }
+
+        .hero h1 span {
+            display: block;
+            color: var(--text-dim);
+        }
+
+        .hero p {
+            max-width: 600px;
+            font-size: 1.25rem;
+            color: var(--text-dim);
+            margin-bottom: 48px;
+        }
+
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .btn-chrome {
+            background: #ffffff;
+            color: #000;
+            padding: 16px 40px;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-chrome:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(255, 255, 255, 0.15);
+        }
+
+        .version-hint {
+            font-size: 0.85rem;
+            color: var(--text-dim);
+            font-family: monospace;
+        }
+
+        /* ── Features ── */
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 0 10%;
+            margin-top: -4rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 40px;
+            border-radius: 32px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-8px);
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.95rem;
+        }
+
+        /* ── Footer ── */
+        footer {
+            padding: 100px 10% 50px;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+
+        .author {
+            font-weight: 800;
+            color: var(--text-main);
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 768px) {
+            nav { padding: 1.5rem 5%; }
+            .hero { padding: 4rem 5% 8rem; }
+            .features { padding: 0 5%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <nav>
+        <div class="logo">
+            <div class="logo-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                    <path d="M8 5v14l11-7L8 5z"/>
+                </svg>
+            </div>
+            SyncCast
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero">
+            <div class="badge">Next-Gen Watch Together</div>
+            <h1>YouTube. <span>In Perfect Sync.</span></h1>
+            <p>Experience movies, music videos, and livestream with your squad. Real-time chat, shared playlists, and seamless synchronization.</p>
+            
+            <div class="cta-group">
+                <a href="/api/v1/extension/download" class="btn-chrome">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12,2C6.48,2,2,6.48,2,12s4.48,10,10,10s10-4.48,10-10S17.52,2,12,2z M17,13h-4v4h-2v-4H7v-2h4V7h2v4h4V13z"/>
+                    </svg>
+                    Add to Chrome
+                </a>
+                <div class="version-hint">Latest Build: v1.0.1 (Stable)</div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="card">
+                <span class="card-icon">⚡</span>
+                <h3>Instant Sync</h3>
+                <p>Proprietary WebSocket engine ensuring sub-100ms lag between all participants. Play, pause, seek—everyone stays in time.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">💬</span>
+                <h3>Mini Chat</h3>
+                <p>Don't just watch, discuss. Our integrated mini-chat lets you react to every moment without leaving the video.</p>
+            </div>
+            <div class="card">
+                <span class="card-icon">📜</span>
+                <h3>Smart Playlist</h3>
+                <p>Collaborative queues. Add your favorite videos and let the system handle the transition automatically.</p>
+            </div>
+        </section>
+
+        <!-- ── NEW: Installation Guide ── -->
+        <section id="install" style="padding: 100px 10% 0; text-align: left;">
+            <div class="badge" style="display: inline-block; margin-bottom: 20px;">Installation Guide</div>
+            <h2 style="font-size: 2.5rem; margin-bottom: 40px; font-weight: 900;">How to Install SyncCast</h2>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div class="card" style="padding: 30px; border-left: 4px solid var(--primary);">
+                    <div style="font-size: 1.5rem; font-weight: 900; color: var(--primary); margin-bottom: 15px;">01. Download</div>
+                    <p>Click the <b>"Add to Chrome"</b> button above to download the <code>synccast.zip</code> package to your computer.</p>
+                </div>
+                
+                <div class="card" style="padding: 30px; border-left: 4px solid #3b82f6;">
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #3b82f6; margin-bottom: 15px;">02. Extract</div>
+                    <p>Locate the downloaded file and <b>Unzip/Extract</b> it into a permanent folder (e.g., in your Documents).</p>
+                </div>
+
+                <div class="card" style="padding: 30px; border-left: 4px solid #10b981;">
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #10b981; margin-bottom: 15px;">03. Developer Mode</div>
+                    <p>Open Chrome and go to <code>chrome://extensions</code>. Switch on <b>"Developer mode"</b> in the top right corner.</p>
+                </div>
+
+                <div class="card" style="padding: 30px; border-left: 4px solid #f59e0b;">
+                    <div style="font-size: 1.5rem; font-weight: 900; color: #f59e0b; margin-bottom: 15px;">04. Load Extension</div>
+                    <p>Click <b>"Load unpacked"</b> and select the folder where you extracted the files. <b>Boom! You're ready.</b></p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px; padding: 20px; background: rgba(245, 158, 11, 0.05); border: 1px dashed rgba(245, 158, 11, 0.3); border-radius: 16px; color: #f59e0b; font-size: 0.9rem; display: flex; align-items: center; gap: 15px;">
+                <span style="font-size: 1.5rem;">⚠️</span>
+                <p><b>Note:</b> Since this is a custom community-built tool, keep Developer Mode ON to ensure the extension functions correctly.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 SyncCast Project. Crafted with ❤️ for the Maja Ecosystem.</p>
+        <div class="author">BANG APING & TEAM</div>
+    </footer>
+</body>
+</html>
