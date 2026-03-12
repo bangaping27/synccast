@@ -11,8 +11,8 @@ PORT=$(grep APP_PORT .env | cut -d '=' -f2)
 echo "🚀 Starting deployment for $APP_NAME..."
 
 # 1. Pull latest changes (optional, uncomment if using git)
-# echo "📥 Pulling latest code..."
-# git pull origin main
+echo "📥 Pulling latest code..."
+git pull origin main
 
 # 2. Build Backend
 echo "🔨 Building Go backend..."
