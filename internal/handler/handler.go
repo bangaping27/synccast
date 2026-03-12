@@ -63,6 +63,9 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		room.GET("/:id/info", h.getRoomInfo)
 	}
 
+	v1.GET("/version", h.getVersion)
+	v1.GET("/extension/download", h.downloadExtension)
+
 
 	// WS is public for now, but room access can be checked in serveWS
 	v1.GET("/ws/:room_id", h.serveWS)
@@ -133,4 +136,20 @@ func (h *Handler) getRoomInfo(c *gin.Context) {
 		"playlist":         playlist,
 		"online_count":     h.hub.RoomSize(roomID),
 	})
+}
+func (h *Handler) getVersion(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"version":    "1.0.1",
+		"changelog":  "Mini Chat & Auto-Next added!",
+		"update_url": "http://localhost:8080/api/v1/extension/download",
+		"required":   false,
+	})
+}
+
+func (h *Handler) downloadExtension(c *gin.Context) {
+	c.Header("Content-Description", "File Transfer")
+	c.Header("Content-Transfer-Encoding", "binary")
+	c.Header("Content-Disposition", "attachment; filename=synccast_v1.0.1.zip")
+	c.Header("Content-Type", "application/octet-stream")
+	c.File("./extension/synccast.zip")
 }

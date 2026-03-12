@@ -5,6 +5,7 @@
 // ── Backend ───────────────────────────────────────────────────────────────────
 export const API_BASE = 'http://localhost:8080/api/v1'
 export const WS_BASE  = 'ws://localhost:8080/api/v1'
+export const VERSION  = '1.0.0'
 
 // ── WebSocket event types (mirrors backend events/events.go) ─────────────────
 
@@ -50,6 +51,7 @@ export const MSG = {
   LOGOUT:           'SC_LOGOUT',
   GET_USER:         'SC_GET_USER',
   CHAT:             'SC_CHAT',              // { message }
+  CHECK_UPDATE:     'SC_CHECK_UPDATE',      // Manual trigger
 
   // State queries
   GET_STATE:        'SC_GET_STATE',         // → responds with RoomState snapshot
@@ -57,6 +59,7 @@ export const MSG = {
   // Background → Popup (push updates via chrome.runtime.sendMessage)
   STATE_UPDATE:     'SC_STATE_UPDATE',
   WS_STATUS:        'SC_WS_STATUS',         // { status: 'connected'|'disconnected'|'connecting' }
+  OTA_UPDATE:       'SC_OTA_UPDATE',        // { version, updateUrl, changelog }
 
   // Background → Content Script
   EXECUTE_ACTION:   'SC_EXECUTE_ACTION',    // { action, currentTime, videoId }

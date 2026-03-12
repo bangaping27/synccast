@@ -5,54 +5,54 @@
     "src": "../../@crx/manifest",
     "isEntry": true
   },
-  "_constants-B6CiGoQh.js": {
-    "file": "assets/constants-B6CiGoQh.js",
+  "_constants-C9dKYTab.js": {
+    "file": "assets/constants-C9dKYTab.js",
     "name": "constants"
   },
   "_main-!~{003}~.js": {
-    "file": "assets/main-6z-LoMAR.css",
+    "file": "assets/main-CpewvLPj.css",
     "src": "_main-!~{003}~.js"
   },
-  "_main-B1MP2hlR.js": {
-    "file": "assets/main-B1MP2hlR.js",
+  "_main-jL4HYh5f.js": {
+    "file": "assets/main-jL4HYh5f.js",
     "name": "main",
     "imports": [
-      "_constants-B6CiGoQh.js"
+      "_constants-C9dKYTab.js"
     ],
     "css": [
-      "assets/main-6z-LoMAR.css"
+      "assets/main-CpewvLPj.css"
     ]
   },
   "index.html": {
-    "file": "assets/index.html-CgJpKmOW.js",
+    "file": "assets/index.html-Ghf1YNNw.js",
     "name": "index.html",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_main-B1MP2hlR.js",
-      "_constants-B6CiGoQh.js"
+      "_main-jL4HYh5f.js",
+      "_constants-C9dKYTab.js"
     ]
   },
   "src/background/service-worker.js": {
-    "file": "assets/service-worker.js-svAVBCkn.js",
+    "file": "assets/service-worker.js-BWcVuBof.js",
     "name": "service-worker.js",
     "src": "src/background/service-worker.js",
     "isEntry": true,
     "imports": [
-      "_constants-B6CiGoQh.js"
+      "_constants-C9dKYTab.js"
     ]
   },
   "src/content/youtube.js": {
-    "file": "assets/youtube.js-DkiUAyRV.js",
+    "file": "assets/youtube.js-CdZvVeod.js",
     "name": "youtube.js",
     "src": "src/content/youtube.js",
     "isEntry": true,
     "imports": [
-      "_constants-B6CiGoQh.js"
+      "_constants-C9dKYTab.js"
     ]
   },
   "youtube.js-loader.js": {
-    "file": "assets/youtube.js-loader-ClM4NJCV.js",
+    "file": "assets/youtube.js-loader-tk_fF8SS.js",
     "src": "youtube.js-loader.js"
   }
 }

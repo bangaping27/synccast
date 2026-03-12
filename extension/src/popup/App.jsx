@@ -7,9 +7,10 @@ import PlaylistPanel  from './components/PlaylistPanel'
 import NowPlaying     from './components/NowPlaying'
 import ControlPanel   from './components/ControlPanel'
 import ChatPanel      from './components/ChatPanel'
+import AboutPanel     from './components/AboutPanel'
 
 // Tab IDs
-const TABS = ['Room', 'Chat', 'Playlist', 'Members']
+const TABS = ['Room', 'Chat', 'Playlist', 'Members', 'About']
 
 export default function App() {
   const [nickname, setNickname]   = useState('')
@@ -23,6 +24,7 @@ export default function App() {
   const [myRooms, setMyRooms]   = useState([])
   const [chatMessages, setChatMessages] = useState([])
   const [toast, setToast]       = useState(null) // { msg, type }
+  const [newVersion, setNewVersion] = useState(null) // { version, updateUrl, changelog }
 
   const showToast = (msg, type = 'info') => {
     setToast({ msg, type })
@@ -61,6 +63,7 @@ export default function App() {
       if (msg.type === MSG.CHAT) {
         setChatMessages(prev => [...prev, msg.payload].slice(-50))
       }
+      if (msg.type === MSG.OTA_UPDATE) setNewVersion(msg.payload)
     }
     chrome.runtime.onMessage.addListener(handler)
     return () => chrome.runtime.onMessage.removeListener(handler)
@@ -157,6 +160,22 @@ export default function App() {
   // ─────────────────────────────────────────────────────────────────────────
   return (
     <div className="flex flex-col w-[380px] min-h-[520px] bg-[#0a0a1a] select-none">
+
+      {/* ── OTA Update Banner ── */}
+      {newVersion && (
+        <div className="bg-gradient-to-r from-violet-600 to-blue-600 px-4 py-2 flex items-center justify-between animate-slide-down">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-bold text-white/90">UPDATE AVAILABLE: v{newVersion.version}</span>
+            <span className="text-[8px] text-white/70 italic truncate max-w-[200px]">{newVersion.changelog}</span>
+          </div>
+          <button 
+            onClick={() => window.open(newVersion.updateUrl, '_blank')}
+            className="bg-white text-violet-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-lg active:scale-95 transition-transform"
+          >
+            Update
+          </button>
+        </div>
+      )}
 
       {/* ── Header ── */}
       <Header
@@ -283,13 +302,19 @@ export default function App() {
             {tab === 'Members' && (
               <PresenceList
                 members={roomState?.members || []}
-                hostId={roomState?.hostId}
-                controllerId={roomState?.controllerId}
+                hostId={roomState?.host_id}
+                controllerId={roomState?.controller_id}
                 myId={userId}
                 isHost={isHost}
                 onTransfer={(targetId) =>
                   sendMsg(MSG.TRANSFER_CONTROL, { user_id: userId, new_control_id: targetId })
                 }
+              />
+            )}
+            {tab === 'About' && (
+              <AboutPanel 
+                onToast={showToast} 
+                newVersion={newVersion} 
               />
             )}
           </div>

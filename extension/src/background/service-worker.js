@@ -8,7 +8,7 @@
  *  4. Keep service worker alive via chrome.alarms (MV3 keepalive trick)
  */
 
-import { API_BASE, WS_BASE, MSG, WS_OUT, STORAGE, ACTION } from '../shared/constants.js'
+import { API_BASE, WS_BASE, MSG, WS_OUT, STORAGE, ACTION, VERSION } from '../shared/constants.js'
 
 // ─── State (in-memory, rebuilt from storage on SW restart) ───────────────────
 let ws = null
@@ -34,14 +34,16 @@ let roomState = {
 
 // ─── Keepalive alarm ─────────────────────────────────────────────────────────
 chrome.alarms.create('sc_keepalive', { periodInMinutes: 0.4 })
+chrome.alarms.create('sc_update',    { periodInMinutes: 30 })
+
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === 'sc_keepalive') {
-    // Just keeping the service worker awake.
-    // If WS dropped while SW was suspended, reconnect.
     if (roomId && userId && ws === null) {
       log('⏰ Alarm woke SW — reconnecting WS…')
       connectWS()
     }
+  } else if (alarm.name === 'sc_update') {
+    checkUpdate()
   }
 })
 
@@ -64,6 +66,7 @@ async function restoreState() {
   }
 }
 restoreState()
+checkUpdate()
 
 // ─── Message router (from Popup or Content Script) ───────────────────────────
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
@@ -135,6 +138,11 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
 
     case MSG.CHAT:
       wsSend({ type: WS_EVT.CHAT, payload: msg.payload })
+      sendResponse({ ok: true })
+      break
+
+    case MSG.CHECK_UPDATE:
+      checkUpdate()
       sendResponse({ ok: true })
       break
   }
@@ -471,6 +479,27 @@ function resetRoomState() {
   return {
     hostId: null, controllerId: null, isLocked: false,
     currentVideoId: null, members: [], playlist: [], onlineCount: 0,
+  }
+}
+
+async function checkUpdate() {
+  try {
+    const res = await fetch(`${API_BASE}/version`)
+    if (!res.ok) return
+    const data = await res.json()
+    if (data.version && data.version !== VERSION) {
+      log('🚀 New version available:', data.version)
+      broadcastToPopup({
+        type: MSG.OTA_UPDATE,
+        payload: {
+          version: data.version,
+          updateUrl: data.update_url,
+          changelog: data.changelog
+        }
+      })
+    }
+  } catch (err) {
+    // Silent
   }
 }
 
