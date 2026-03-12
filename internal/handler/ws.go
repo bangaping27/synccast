@@ -185,7 +185,24 @@ func (h *Handler) dispatch(ctx context.Context, c *hub.Client, roomID string, en
 
 		if p.VideoID != "" && (room == nil || room.CurrentVideoID != p.VideoID) {
 			_ = h.store.SetCurrentVideo(ctx, roomID, p.VideoID)
-			// Broadcast partial state update so everyone's UI knows what's playing
+
+			// Auto-pop from playlist if this video matches the first item
+			playlist, _ := h.store.GetPlaylist(ctx, roomID)
+			if len(playlist) > 0 && playlist[0].Vid == p.VideoID {
+				_, _ = h.store.PopPlaylist(ctx, roomID)
+				
+				// Re-fetch and broadcast updated playlist
+				newPlaylist, _ := h.store.GetPlaylist(ctx, roomID)
+				pItems := make([]events.PlaylistItem, 0, len(newPlaylist))
+				for _, it := range newPlaylist {
+					pItems = append(pItems, events.PlaylistItem{Vid: it.Vid, ReqBy: it.ReqBy, Title: it.Title})
+				}
+				h.hub.BroadcastEvent(roomID, events.EvtPlaylistUpdated, events.PlaylistUpdatedPayload{
+					Playlist: pItems,
+				})
+			}
+
+			// Broadcast room state update
 			h.hub.BroadcastEvent(roomID, events.EvtRoomState, map[string]interface{}{
 				"current_video_id": p.VideoID,
 			})

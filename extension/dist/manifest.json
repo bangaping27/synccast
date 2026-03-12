@@ -28,7 +28,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/youtube.js-loader-C1Wxv3Y1.js"
+        "assets/youtube.js-loader-ClM4NJCV.js"
       ],
       "matches": [
         "*://*.youtube.com/*"
@@ -60,8 +60,8 @@
       ],
       "resources": [
         "src/content/*",
-        "assets/constants-C2qZbf5i.js",
-        "assets/youtube.js-C3ZbS_0f.js"
+        "assets/constants-B6CiGoQh.js",
+        "assets/youtube.js-DkiUAyRV.js"
       ],
       "use_dynamic_url": false
     }

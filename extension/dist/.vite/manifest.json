@@ -5,54 +5,54 @@
     "src": "../../@crx/manifest",
     "isEntry": true
   },
-  "_constants-C2qZbf5i.js": {
-    "file": "assets/constants-C2qZbf5i.js",
+  "_constants-B6CiGoQh.js": {
+    "file": "assets/constants-B6CiGoQh.js",
     "name": "constants"
   },
   "_main-!~{003}~.js": {
-    "file": "assets/main-Cg-gp-xJ.css",
+    "file": "assets/main-6z-LoMAR.css",
     "src": "_main-!~{003}~.js"
   },
-  "_main-TivfFcug.js": {
-    "file": "assets/main-TivfFcug.js",
+  "_main-B1MP2hlR.js": {
+    "file": "assets/main-B1MP2hlR.js",
     "name": "main",
     "imports": [
-      "_constants-C2qZbf5i.js"
+      "_constants-B6CiGoQh.js"
     ],
     "css": [
-      "assets/main-Cg-gp-xJ.css"
+      "assets/main-6z-LoMAR.css"
     ]
   },
   "index.html": {
-    "file": "assets/index.html-BXEoDeKn.js",
+    "file": "assets/index.html-CgJpKmOW.js",
     "name": "index.html",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_main-TivfFcug.js",
-      "_constants-C2qZbf5i.js"
+      "_main-B1MP2hlR.js",
+      "_constants-B6CiGoQh.js"
     ]
   },
   "src/background/service-worker.js": {
-    "file": "assets/service-worker.js-BiXzUpOU.js",
+    "file": "assets/service-worker.js-svAVBCkn.js",
     "name": "service-worker.js",
     "src": "src/background/service-worker.js",
     "isEntry": true,
     "imports": [
-      "_constants-C2qZbf5i.js"
+      "_constants-B6CiGoQh.js"
     ]
   },
   "src/content/youtube.js": {
-    "file": "assets/youtube.js-C3ZbS_0f.js",
+    "file": "assets/youtube.js-DkiUAyRV.js",
     "name": "youtube.js",
     "src": "src/content/youtube.js",
     "isEntry": true,
     "imports": [
-      "_constants-C2qZbf5i.js"
+      "_constants-B6CiGoQh.js"
     ]
   },
   "youtube.js-loader.js": {
-    "file": "assets/youtube.js-loader-C1Wxv3Y1.js",
+    "file": "assets/youtube.js-loader-ClM4NJCV.js",
     "src": "youtube.js-loader.js"
   }
 }

@@ -339,23 +339,25 @@ function handleServerMessage(msg) {
   switch (msg.type) {
 
     case WS_OUT.ROOM_STATE:
-      mergeRoomState(msg.payload)
+      roomState = msg.payload
+      saveRoomState()
+      broadcastToPopup({ type: MSG.STATE_UPDATE, payload: { roomState } })
       break
 
     case WS_OUT.USER_JOINED:
-      roomState.members = msg.payload.members || roomState.members
-      break
-
     case WS_OUT.USER_LEFT:
-      roomState.members = msg.payload.members || roomState.members
+      if (msg.payload.members) roomState.members = msg.payload.members
+      broadcastToPopup({ type: MSG.STATE_UPDATE, payload: { roomState } })
       break
 
     case WS_OUT.NEW_HOST:
-      roomState.hostId = msg.payload.new_host_id
+      roomState.host_id = msg.payload.new_host_id
+      broadcastToPopup({ type: MSG.STATE_UPDATE, payload: { roomState } })
       break
 
     case WS_OUT.PLAYLIST_UPDATED:
       roomState.playlist = msg.payload.playlist || []
+      broadcastToPopup({ type: MSG.STATE_UPDATE, payload: { roomState } })
       break
 
     case WS_OUT.CHAT:
@@ -365,6 +367,10 @@ function handleServerMessage(msg) {
     case WS_OUT.EXECUTE_ACTION:
       // Forward to active YouTube content script
       forwardToContentScript(msg.payload)
+      break
+
+    case WS_OUT.ERROR:
+      log('Server Error:', msg.payload.message)
       break
   }
 
@@ -393,16 +399,13 @@ function handleVideoEvent({ action, currentTime, videoId, isAd }) {
 
   // Auto-next logic: If video ended and we are the controller, try to play the next one
   if (action === 'ENDED') {
-    const isCtrl = userId && roomState?.controllerId === userId
+    const isCtrl = userId && roomState?.controller_id === userId
     if (isCtrl && roomState?.playlist?.length > 0) {
-      // Small delay to prevent race conditions
       setTimeout(() => {
-        // Technically the server should handle the pop when we sync a new video_id
-        // but for now we just find the next one and sync it.
-        const nextVideo = roomState.playlist[0] // or next indexed
+        const nextVideo = roomState.playlist[0]
         wsSend({
-          type: 'SYNC_STATE', // Assuming WS_EVT.SYNC_STATE is 'SYNC_STATE'
-          payload: { action: 'PLAY', current_time: 0, video_id: nextVideo.vid } // Assuming ACTION.PLAY is 'PLAY'
+          type: WS_EVT.SYNC_STATE,
+          payload: { user_id: userId, action: ACTION.PLAY, current_time: 0, video_id: nextVideo.vid }
         })
       }, 500)
     }

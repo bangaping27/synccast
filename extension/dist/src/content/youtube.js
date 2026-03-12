@@ -55,6 +55,7 @@ function attachVideoListeners() {
 
   video.addEventListener('play',   () => onVideoEvent(ACTION.PLAY))
   video.addEventListener('pause',  () => onVideoEvent(ACTION.PAUSE))
+  video.addEventListener('ended',  () => onVideoEvent('ENDED'))
   video.addEventListener('seeked', () => {
     if (Math.abs(video.currentTime - lastTime) > SEEK_EPSILON) {
       onVideoEvent(ACTION.SEEK)

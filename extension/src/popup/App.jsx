@@ -5,7 +5,8 @@ import Auth           from './components/Auth'
 import PresenceList   from './components/PresenceList'
 import PlaylistPanel  from './components/PlaylistPanel'
 import NowPlaying     from './components/NowPlaying'
-import ChatPanel    from './components/ChatPanel'
+import ControlPanel   from './components/ControlPanel'
+import ChatPanel      from './components/ChatPanel'
 
 // Tab IDs
 const TABS = ['Room', 'Chat', 'Playlist', 'Members']
@@ -74,9 +75,9 @@ export default function App() {
     if (loggedIn != null) setIsLoggedIn(loggedIn)
   }
 
-  const isConnected = wsStatus === 'connected' && !!roomId
-  const isHost      = isConnected && roomState?.hostId === userId
-  const isCtrl      = isConnected && roomState?.controllerId === userId
+  const isConnected = !!roomId
+  const isHost      = userId && roomState?.host_id === userId
+  const isCtrl      = userId && roomState?.controller_id === userId
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   function sendMsg(type, payload = {}) {
@@ -151,6 +152,7 @@ export default function App() {
   function handleSendChat(message) {
     sendMsg(MSG.CHAT, { message })
   }
+
 
   // ─────────────────────────────────────────────────────────────────────────
   return (
@@ -389,4 +391,15 @@ function NicknameBar({ nickname, onChange }) {
       ) : (
         <button
           onClick={() => setEditing(true)}
-          classN
+          className="w-full text-left glass px-3 py-2 flex items-center gap-2 group hover:border-violet-500/40 transition-all"
+        >
+          <span className="text-lg">👤</span>
+          <span className="text-sm text-white/70 group-hover:text-white flex-1 truncate">
+            {nickname || <span className="text-white/30 italic">Set nickname…</span>}
+          </span>
+          <span className="text-white/20 text-xs group-hover:text-violet-400">✎</span>
+        </button>
+      )}
+    </div>
+  )
+}
