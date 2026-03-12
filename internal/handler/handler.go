@@ -61,6 +61,7 @@ func (h *Handler) RegisterRoutes(r *gin.Engine) {
 		room := protected.Group("/room")
 		room.POST("/create", h.createRoom)
 		room.GET("/:id/info", h.getRoomInfo)
+		room.DELETE("/:id", h.deleteRoom)
 	}
 
 	v1.GET("/version", h.getVersion)
@@ -152,4 +153,16 @@ func (h *Handler) downloadExtension(c *gin.Context) {
 	c.Header("Content-Disposition", "attachment; filename=synccast_v1.0.1.zip")
 	c.Header("Content-Type", "application/octet-stream")
 	c.File("./extension/synccast.zip")
+}
+func (h *Handler) deleteRoom(c *gin.Context) {
+	username := c.GetString("username")
+	roomID := c.Param("id")
+	if err := h.userStore.DeleteRoomFromUser(c.Request.Context(), username, roomID); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "could not delete"})
+		return
+	}
+	if h.hub.RoomSize(roomID) == 0 {
+		_ = h.store.DeleteRoom(c.Request.Context(), roomID)
+	}
+	c.JSON(http.StatusOK, gin.H{"ok": true})
 }

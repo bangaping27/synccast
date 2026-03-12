@@ -5,7 +5,7 @@
 // ── Backend ───────────────────────────────────────────────────────────────────
 export const API_BASE = 'http://localhost:8080/api/v1'
 export const WS_BASE  = 'ws://localhost:8080/api/v1'
-export const VERSION  = '1.0.0'
+export const VERSION  = '1.0.1'
 
 // ── WebSocket event types (mirrors backend events/events.go) ─────────────────
 
@@ -38,6 +38,7 @@ export const MSG = {
   CREATE_ROOM:      'SC_CREATE_ROOM',       // { hostId, hostName }
   JOIN_ROOM:        'SC_JOIN_ROOM',         // { roomId, userId, userName }
   LEAVE_ROOM:       'SC_LEAVE_ROOM',
+  DELETE_ROOM:      'SC_DELETE_ROOM',       // { roomId }
 
   // Playback control
   SEND_SYNC_STATE:  'SC_SEND_SYNC_STATE',   // proxy WS event to server

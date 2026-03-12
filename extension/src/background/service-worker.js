@@ -102,6 +102,10 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       sendResponse({ ok: true })
       break
 
+    case MSG.DELETE_ROOM:
+      handleDeleteRoom(msg.payload.roomId, sendResponse)
+      return true
+
     case MSG.GET_STATE:
       sendResponse({ roomState, wsStatus, roomId, userId, username: userName, isLoggedIn: !!jwtToken })
       break
@@ -256,6 +260,20 @@ async function handleJoinRoom({ roomId: rid }, sendResponse) {
     sendResponse({ ok: true })
   } catch (err) {
     log('joinRoom error:', err)
+    sendResponse({ ok: false, error: err.message })
+  }
+}
+
+async function handleDeleteRoom(rid, sendResponse) {
+  try {
+    const res = await fetch(`${API_BASE}/room/${rid}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${jwtToken}` }
+    })
+    const data = await res.json()
+    if (!res.ok) throw new Error(data.error || 'Failed to delete')
+    sendResponse({ ok: true })
+  } catch (err) {
     sendResponse({ ok: false, error: err.message })
   }
 }
@@ -487,16 +505,41 @@ async function checkUpdate() {
     const res = await fetch(`${API_BASE}/version`)
     if (!res.ok) return
     const data = await res.json()
+    
     if (data.version && data.version !== VERSION) {
       log('🚀 New version available:', data.version)
+      
+      // Auto-download logic
+      const storageKey = `sc_downloaded_${data.version}`
+      const hasDownloaded = await chrome.storage.local.get(storageKey)
+      
+      if (!hasDownloaded[storageKey]) {
+        log('📦 Starting automatic update download…')
+        chrome.downloads.download({
+          url: data.update_url,
+          filename: `synccast_v${data.version}.zip`,
+          conflictAction: 'overwrite',
+          saveAs: false
+        }, async (downloadId) => {
+           if (downloadId) {
+             await chrome.storage.local.set({ [storageKey]: true })
+             log('✅ Update ZIP downloaded automatically.')
+           }
+        })
+      }
+
       broadcastToPopup({
         type: MSG.OTA_UPDATE,
         payload: {
           version: data.version,
           updateUrl: data.update_url,
-          changelog: data.changelog
+          changelog: data.changelog,
+          autoStarted: true
         }
       })
+    } else {
+      // Clear status if we are on latest
+      broadcastToPopup({ type: MSG.OTA_UPDATE, payload: null })
     }
   } catch (err) {
     // Silent

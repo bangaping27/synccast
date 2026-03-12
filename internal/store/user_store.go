@@ -104,3 +104,10 @@ func (s *UserStore) GetUserRooms(ctx context.Context, username string) ([]string
 	}
 	return rooms, nil
 }
+func (s *UserStore) DeleteRoomFromUser(ctx context.Context, username, roomID string) error {
+	_, err := s.db.ExecContext(ctx, 
+		"DELETE FROM rooms WHERE id = $1 AND host_username = $2", 
+		roomID, username,
+	)
+	return err
+}

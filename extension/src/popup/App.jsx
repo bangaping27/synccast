@@ -10,7 +10,7 @@ import ChatPanel      from './components/ChatPanel'
 import AboutPanel     from './components/AboutPanel'
 
 // Tab IDs
-const TABS = ['Room', 'Chat', 'Playlist', 'Members', 'About']
+const TABS = ['Room', 'Chat', 'Playlist', 'Members']
 
 export default function App() {
   const [nickname, setNickname]   = useState('')
@@ -19,6 +19,7 @@ export default function App() {
   const [userId,   setUserId]     = useState(null)
   const [roomState, setRoomState] = useState(null)
   const [tab, setTab]             = useState('Room')
+  const [lobbyTab, setLobbyTab]   = useState('Rooms')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [username, setUsername] = useState('')
   const [myRooms, setMyRooms]   = useState([])
@@ -135,12 +136,23 @@ export default function App() {
     }
   }
 
-  async function handleJoinRoom(code) {
-    const res = await sendMsg(MSG.JOIN_ROOM, { roomId: code.trim() })
+  async function handleJoinRoom(id) {
+    const res = await sendMsg(MSG.JOIN_ROOM, { roomId: id })
     if (res?.ok) {
-       showToast('Joined room successfully', 'success')
+      setRoomId(id)
+      setChatMessages([])
     } else {
-       showToast(res?.error || 'Failed to join room', 'error')
+      showToast(res?.error || 'Failed to join', 'error')
+    }
+  }
+
+  async function handleDeleteSavedRoom(id) {
+    const res = await sendMsg(MSG.DELETE_ROOM, { roomId: id })
+    if (res?.ok) {
+      showToast('Room removed from history', 'success')
+      fetchMyRooms()
+    } else {
+      showToast(res?.error || 'Failed to remove room', 'error')
     }
   }
 
@@ -163,17 +175,15 @@ export default function App() {
 
       {/* ── OTA Update Banner ── */}
       {newVersion && (
-        <div className="bg-gradient-to-r from-violet-600 to-blue-600 px-4 py-2 flex items-center justify-between animate-slide-down">
+        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2 flex items-center justify-between animate-slide-down">
           <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-white/90">UPDATE AVAILABLE: v{newVersion.version}</span>
-            <span className="text-[8px] text-white/70 italic truncate max-w-[200px]">{newVersion.changelog}</span>
+            <span className="text-[10px] font-bold text-white/90 uppercase tracking-tighter">Automatic Update Initiated 🚀</span>
+            <span className="text-[8px] text-white/70 italic truncate max-w-[200px]">New v{newVersion.version}: {newVersion.changelog}</span>
           </div>
-          <button 
-            onClick={() => window.open(newVersion.updateUrl, '_blank')}
-            className="bg-white text-violet-600 text-[10px] font-bold px-3 py-1 rounded-full shadow-lg active:scale-95 transition-transform"
-          >
-            Update
-          </button>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <span className="text-[9px] font-bold text-white/80">Updating…</span>
+          </div>
         </div>
       )}
 
@@ -213,14 +223,35 @@ export default function App() {
           <Auth onLogin={handleLogin} onRegister={handleRegister} />
         </div>
       ) : !isConnected ? (
-        /* ── Not connected: Room setup ── */
-        <div className="flex-1 flex flex-col justify-center px-4 pb-4 animate-slide-up">
-          <RoomSetup
-            onCreateRoom={handleCreateRoom}
-            onJoinRoom={handleJoinRoom}
-            wsStatus={wsStatus}
-            myRooms={myRooms}
-          />
+        /* ── Not connected: Room setup / About ── */
+        <div className="flex-1 flex flex-col px-4 pb-4 animate-slide-up">
+          <div className="flex gap-2 mb-4 bg-white/5 p-1 rounded-xl border border-white/5">
+            {['Rooms', 'About'].map(t => (
+              <button
+                key={t}
+                onClick={() => setLobbyTab(t)}
+                className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                  lobbyTab === t ? 'bg-violet-600/80 text-white shadow-lg shadow-violet-900/40' : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+
+          {lobbyTab === 'Rooms' ? (
+            <RoomSetup
+              onCreateRoom={handleCreateRoom}
+              onJoinRoom={handleJoinRoom}
+              onDeleteRoom={handleDeleteSavedRoom}
+              wsStatus={wsStatus}
+              myRooms={myRooms}
+            />
+          ) : (
+            <div className="flex-1 overflow-y-auto custom-scrollbar">
+              <AboutPanel onToast={showToast} newVersion={newVersion} />
+            </div>
+          )}
         </div>
       ) : (
         /* ── Connected: Main dashboard ── */
@@ -309,12 +340,6 @@ export default function App() {
                 onTransfer={(targetId) =>
                   sendMsg(MSG.TRANSFER_CONTROL, { user_id: userId, new_control_id: targetId })
                 }
-              />
-            )}
-            {tab === 'About' && (
-              <AboutPanel 
-                onToast={showToast} 
-                newVersion={newVersion} 
               />
             )}
           </div>

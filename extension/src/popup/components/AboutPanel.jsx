@@ -45,27 +45,25 @@ export default function AboutPanel({ onToast, newVersion }) {
           <div className="flex flex-col gap-0.5">
             <h2 className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Update Center</h2>
             <p className="text-[11px] text-white/40">
-              {newVersion ? `Server suggests v${newVersion.version}` : 'Up to date via local server'}
+              {newVersion ? `New v${newVersion.version} available` : 'System is up to date'}
             </p>
           </div>
           
           {newVersion ? (
-            <button 
-              onClick={() => window.open(newVersion.updateUrl, '_blank')}
-              className="btn-primary px-4 py-1.5 text-xs shadow-lg shadow-violet-900/40 animate-pulse"
-            >
-              Get Latest ZIP
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-emerald-400 animate-pulse font-bold">UPDATING...</span>
+              <button 
+                onClick={() => window.open(newVersion.updateUrl, '_blank')}
+                className="bg-white/10 p-1.5 rounded-lg hover:bg-white/20 transition-colors"
+                title="Manual Link"
+              >
+                📥
+              </button>
+            </div>
           ) : (
-            <button 
-              onClick={handleCheck}
-              disabled={checking}
-              className={`text-xs px-4 py-1.5 rounded-lg border border-white/10 transition-all ${
-                checking ? 'bg-white/5 text-white/20' : 'bg-white/5 text-white/60 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              {checking ? 'Checking...' : 'Check for Updates'}
-            </button>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+              <span className="text-[10px] font-bold text-emerald-400 uppercase tracking-tighter italic">Latest Version ✨</span>
+            </div>
           )}
         </section>
       </div>

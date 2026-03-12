@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-export default function RoomSetup({ onCreateRoom, onJoinRoom, wsStatus, myRooms = [] }) {
+export default function RoomSetup({ onCreateRoom, onJoinRoom, onDeleteRoom, wsStatus, myRooms = [] }) {
   const [joinCode, setJoinCode] = useState('')
   const [loading,  setLoading]  = useState(null) // 'create' | 'join' | 'saved'
   const [activeSaved, setActiveSaved] = useState(null)
@@ -42,21 +42,37 @@ export default function RoomSetup({ onCreateRoom, onJoinRoom, wsStatus, myRooms 
       {/* Saved Rooms */}
       {myRooms.length > 0 && (
         <div className="glass p-3 flex flex-col gap-2">
-          <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wider">Your Rooms</p>
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] font-semibold text-white/50 uppercase tracking-wider">Your Rooms</p>
+            <button 
+              onClick={() => { if(confirm('Clear all history?')) myRooms.forEach(id => onDeleteRoom(id)) }}
+              className="text-[9px] text-red-400/50 hover:text-red-400 transition-colors uppercase font-bold"
+            >
+              Clear All
+            </button>
+          </div>
           <div className="flex flex-wrap gap-2">
             {myRooms.map(id => (
-              <button
-                key={id}
-                onClick={() => handleJoin(id)}
-                disabled={isLoading}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all border ${
-                  activeSaved === id 
-                    ? 'bg-violet-600/50 border-violet-400 text-white' 
-                    : 'bg-white/5 border-white/10 text-violet-300 hover:bg-white/10 hover:border-violet-500/50'
-                }`}
-              >
-                {activeSaved === id ? '...' : id}
-              </button>
+              <div key={id} className="relative group/saved">
+                <button
+                  onClick={() => handleJoin(id)}
+                  disabled={isLoading}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all border pr-7 ${
+                    activeSaved === id 
+                      ? 'bg-violet-600/50 border-violet-400 text-white' 
+                      : 'bg-white/5 border-white/10 text-violet-300 hover:bg-white/10 hover:border-violet-500/50'
+                  }`}
+                >
+                  {activeSaved === id ? '...' : id}
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); onDeleteRoom(id) }}
+                  className="absolute right-1 top-1/2 -translate-y-1/2 w-5 h-5 flex items-center justify-center text-white/20 hover:text-red-400 opacity-0 group-hover/saved:opacity-100 transition-all"
+                  title="Remove from history"
+                >
+                  ×
+                </button>
+              </div>
             ))}
           </div>
         </div>

@@ -239,8 +239,14 @@ func (h *Hub) doUnregister(c *Client) {
 		Members: members,
 	})
 
-	// Auto-election if the departing user was the host
-	h.maybeElectNewHost(ctx, c.RoomID, c.UserID)
+	// If room is now empty, delete it completely
+	if len(members) == 0 {
+		_ = h.store.DeleteRoom(ctx, c.RoomID)
+		h.log.Infof("hub: room %s is empty, cleaned up", c.RoomID)
+	} else {
+		// Auto-election if the departing user was the host
+		h.maybeElectNewHost(ctx, c.RoomID, c.UserID)
+	}
 
 	h.log.Infof("hub: [%s] %s left", c.RoomID, c.UserID)
 }

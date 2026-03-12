@@ -1,58 +1,58 @@
 {
   "../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-eAx9kshG.js",
+    "file": "assets/crx-manifest.js-BjBP1ud9.js",
     "name": "crx-manifest.js",
     "src": "../../@crx/manifest",
     "isEntry": true
   },
-  "_constants-C9dKYTab.js": {
-    "file": "assets/constants-C9dKYTab.js",
+  "_constants-C_d9O5Em.js": {
+    "file": "assets/constants-C_d9O5Em.js",
     "name": "constants"
   },
   "_main-!~{003}~.js": {
-    "file": "assets/main-CpewvLPj.css",
+    "file": "assets/main-B7x3v3ku.css",
     "src": "_main-!~{003}~.js"
   },
-  "_main-jL4HYh5f.js": {
-    "file": "assets/main-jL4HYh5f.js",
+  "_main-CSeSSpw-.js": {
+    "file": "assets/main-CSeSSpw-.js",
     "name": "main",
     "imports": [
-      "_constants-C9dKYTab.js"
+      "_constants-C_d9O5Em.js"
     ],
     "css": [
-      "assets/main-CpewvLPj.css"
+      "assets/main-B7x3v3ku.css"
     ]
   },
   "index.html": {
-    "file": "assets/index.html-Ghf1YNNw.js",
+    "file": "assets/index.html-DF8Me3Se.js",
     "name": "index.html",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_main-jL4HYh5f.js",
-      "_constants-C9dKYTab.js"
+      "_main-CSeSSpw-.js",
+      "_constants-C_d9O5Em.js"
     ]
   },
   "src/background/service-worker.js": {
-    "file": "assets/service-worker.js-BWcVuBof.js",
+    "file": "assets/service-worker.js-CK4i9mP7.js",
     "name": "service-worker.js",
     "src": "src/background/service-worker.js",
     "isEntry": true,
     "imports": [
-      "_constants-C9dKYTab.js"
+      "_constants-C_d9O5Em.js"
     ]
   },
   "src/content/youtube.js": {
-    "file": "assets/youtube.js-CdZvVeod.js",
+    "file": "assets/youtube.js-mzbSioqV.js",
     "name": "youtube.js",
     "src": "src/content/youtube.js",
     "isEntry": true,
     "imports": [
-      "_constants-C9dKYTab.js"
+      "_constants-C_d9O5Em.js"
     ]
   },
   "youtube.js-loader.js": {
-    "file": "assets/youtube.js-loader-tk_fF8SS.js",
+    "file": "assets/youtube.js-loader-Ctcp4Pwn.js",
     "src": "youtube.js-loader.js"
   }
 }
