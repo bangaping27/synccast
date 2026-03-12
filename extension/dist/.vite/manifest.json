@@ -1,6 +1,6 @@
 {
   "../../@crx/manifest": {
-    "file": "assets/crx-manifest.js-D0XBMj31.js",
+    "file": "assets/crx-manifest.js-C_ltPJPX.js",
     "name": "crx-manifest.js",
     "src": "../../@crx/manifest",
     "isEntry": true
@@ -13,8 +13,8 @@
     "file": "assets/main-B7x3v3ku.css",
     "src": "_main-!~{003}~.js"
   },
-  "_main-tVLqG-n2.js": {
-    "file": "assets/main-tVLqG-n2.js",
+  "_main-DDUyI-AH.js": {
+    "file": "assets/main-DDUyI-AH.js",
     "name": "main",
     "imports": [
       "_constants-CfgkD9zo.js"
@@ -24,17 +24,17 @@
     ]
   },
   "index.html": {
-    "file": "assets/index.html-DRHOLMkE.js",
+    "file": "assets/index.html-CD35KKqs.js",
     "name": "index.html",
     "src": "index.html",
     "isEntry": true,
     "imports": [
-      "_main-tVLqG-n2.js",
+      "_main-DDUyI-AH.js",
       "_constants-CfgkD9zo.js"
     ]
   },
   "src/background/service-worker.js": {
-    "file": "assets/service-worker.js-DRUN6CSq.js",
+    "file": "assets/service-worker.js-D8Yg_yoh.js",
     "name": "service-worker.js",
     "src": "src/background/service-worker.js",
     "isEntry": true,

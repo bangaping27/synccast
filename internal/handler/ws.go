@@ -63,9 +63,9 @@ func (h *Handler) serveWS(c *gin.Context) {
 	go h.readPump(conn, client, roomID)
 }
 
-// pushRoomState sends an initial ROOM_STATE snapshot to the connecting client.
 func (h *Handler) pushRoomState(ctx context.Context, c *hub.Client, roomID string, room *store.RoomState) {
 	playlist, _ := h.store.GetPlaylist(ctx, roomID)
+	members, _ := h.store.GetMembers(ctx, roomID)
 
 	pItems := make([]events.PlaylistItem, 0, len(playlist))
 	for _, p := range playlist {
@@ -80,6 +80,7 @@ func (h *Handler) pushRoomState(ctx context.Context, c *hub.Client, roomID strin
 			"is_locked":        room.IsLocked,
 			"current_video_id": room.CurrentVideoID,
 			"playlist":         pItems,
+			"members":          members,
 		},
 	})
 	c.Send(b)

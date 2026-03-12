@@ -145,12 +145,32 @@ func (h *Hub) Broadcast(roomID string, data []byte) {
 
 // BroadcastEvent serialises an envelope and enqueues it for broadcast.
 func (h *Hub) BroadcastEvent(roomID, evtType string, payload interface{}) {
-	b, err := json.Marshal(events.Envelope{Type: evtType, Payload: payload})
+	h.log.Infof("hub: broadcasting %s to room %s", evtType, roomID)
+	
+	// 1. Broadcast to local clients in this instance
+	env := events.Envelope{Type: evtType, Payload: payload}
+	b, err := json.Marshal(env)
 	if err != nil {
 		h.log.Errorf("hub: marshal error: %v", err)
 		return
 	}
 	h.Broadcast(roomID, b)
+
+	// 2. Publish to Redis for other backend instances
+	// We wrap in a pubsub.Message
+	psMsg := pubsub.Message{
+		RoomID:  roomID,
+		Type:    evtType,
+		Payload: nil, // We'll marshal the payload separately below
+	}
+	
+	pBytes, _ := json.Marshal(payload)
+	psMsg.Payload = pBytes
+
+	ctx := context.Background()
+	if err := h.ps.Publish(ctx, roomID, psMsg); err != nil {
+		h.log.Errorf("hub: redis publish error: %v", err)
+	}
 }
 
 // SendTo delivers a message to a single user within a room.

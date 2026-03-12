@@ -365,9 +365,9 @@ function handleServerMessage(msg) {
   switch (msg.type) {
 
     case WS_OUT.ROOM_STATE:
-      roomState = msg.payload
+      mergeRoomState(msg.payload)
       saveRoomState()
-      broadcastToPopup({ type: MSG.STATE_UPDATE, payload: { roomState } })
+      broadcastToPopup({ type: MSG.STATE_UPDATE, payload: { roomState, roomId, userId } })
       break
 
     case WS_OUT.USER_JOINED:
@@ -408,10 +408,10 @@ function handleServerMessage(msg) {
 function mergeRoomState(partial) {
   if (partial.host_id       != null) roomState.hostId         = partial.host_id
   if (partial.controller_id != null) roomState.controllerId   = partial.controller_id
-  if (partial.is_locked     != null) roomState.isLocked        = partial.is_locked
+  if (partial.is_locked     != null) roomState.isLocked       = partial.is_locked
   if (partial.current_video_id != null) roomState.currentVideoId = partial.current_video_id
-  if (partial.playlist      != null) roomState.playlist        = partial.playlist
-  if (partial.controller_id != null) roomState.controllerId   = partial.controller_id
+  if (partial.playlist      != null) roomState.playlist       = partial.playlist
+  if (partial.members       != null) roomState.members        = partial.members
 }
 
 // ─── Video event from content script ─────────────────────────────────────────
@@ -453,13 +453,21 @@ async function forwardToContentScript(payload) {
     // Cari semua tab youtube, tidak hanya yang aktif
     const tabs = await chrome.tabs.query({ url: "*://*.youtube.com/*" })
     if (tabs.length === 0) return
-    
+
+    // Prepare mapped payload for content script (camelCase)
+    const mapped = {
+      action: payload.action,
+      currentTime: payload.current_time,
+      videoId: payload.video_id,
+      issuedBy: payload.issued_by
+    }
+
     // Kirim ke tab youtube pertama yang ditemukan
-    chrome.tabs.sendMessage(tabs[0].id, { type: MSG.EXECUTE_ACTION, payload })
+    chrome.tabs.sendMessage(tabs[0].id, { type: MSG.EXECUTE_ACTION, payload: mapped })
     
     // Jika ini perintah remote, teruskan sebagai REMOTE_CONTROL juga
     if (payload.remote) {
-      chrome.tabs.sendMessage(tabs[0].id, { type: MSG.REMOTE_CONTROL, payload })
+      chrome.tabs.sendMessage(tabs[0].id, { type: MSG.REMOTE_CONTROL, payload: mapped })
     }
   } catch (e) {
     log('forwardToContentScript error:', e)

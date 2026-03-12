@@ -18,8 +18,7 @@
     },
     "host_permissions": [
         "*://*.youtube.com/*",
-        "http://localhost:8080/*",
-        "ws://localhost:8080/*"
+        "https://synccast.pipihub.id/*"
     ],
     "background": {
         "service_worker": "src/background/service-worker.js",

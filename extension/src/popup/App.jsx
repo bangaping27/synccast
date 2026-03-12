@@ -80,8 +80,8 @@ export default function App() {
   }
 
   const isConnected = !!roomId
-  const isHost      = userId && roomState?.host_id === userId
-  const isCtrl      = userId && roomState?.controller_id === userId
+  const isHost      = userId && roomState?.hostId === userId
+  const isCtrl      = userId && roomState?.controllerId === userId
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   function sendMsg(type, payload = {}) {
@@ -333,8 +333,8 @@ export default function App() {
             {tab === 'Members' && (
               <PresenceList
                 members={roomState?.members || []}
-                hostId={roomState?.host_id}
-                controllerId={roomState?.controller_id}
+                hostId={roomState?.hostId}
+                controllerId={roomState?.controllerId}
                 myId={userId}
                 isHost={isHost}
                 onTransfer={(targetId) =>
