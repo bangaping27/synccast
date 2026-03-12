@@ -1,0 +1,58 @@
+{
+  "../../@crx/manifest": {
+    "file": "assets/crx-manifest.js-eAx9kshG.js",
+    "name": "crx-manifest.js",
+    "src": "../../@crx/manifest",
+    "isEntry": true
+  },
+  "_constants-C2qZbf5i.js": {
+    "file": "assets/constants-C2qZbf5i.js",
+    "name": "constants"
+  },
+  "_main-!~{003}~.js": {
+    "file": "assets/main-Cg-gp-xJ.css",
+    "src": "_main-!~{003}~.js"
+  },
+  "_main-TivfFcug.js": {
+    "file": "assets/main-TivfFcug.js",
+    "name": "main",
+    "imports": [
+      "_constants-C2qZbf5i.js"
+    ],
+    "css": [
+      "assets/main-Cg-gp-xJ.css"
+    ]
+  },
+  "index.html": {
+    "file": "assets/index.html-BXEoDeKn.js",
+    "name": "index.html",
+    "src": "index.html",
+    "isEntry": true,
+    "imports": [
+      "_main-TivfFcug.js",
+      "_constants-C2qZbf5i.js"
+    ]
+  },
+  "src/background/service-worker.js": {
+    "file": "assets/service-worker.js-BiXzUpOU.js",
+    "name": "service-worker.js",
+    "src": "src/background/service-worker.js",
+    "isEntry": true,
+    "imports": [
+      "_constants-C2qZbf5i.js"
+    ]
+  },
+  "src/content/youtube.js": {
+    "file": "assets/youtube.js-C3ZbS_0f.js",
+    "name": "youtube.js",
+    "src": "src/content/youtube.js",
+    "isEntry": true,
+    "imports": [
+      "_constants-C2qZbf5i.js"
+    ]
+  },
+  "youtube.js-loader.js": {
+    "file": "assets/youtube.js-loader-C1Wxv3Y1.js",
+    "src": "youtube.js-loader.js"
+  }
+}

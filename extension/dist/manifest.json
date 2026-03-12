@@ -1,0 +1,69 @@
+{
+  "manifest_version": 3,
+  "name": "SyncCast — Watch Together",
+  "version": "1.0.0",
+  "description": "Watch YouTube together in perfect sync. Part of the Maja Ecosystem.",
+  "permissions": [
+    "tabs",
+    "storage",
+    "scripting",
+    "declarativeContent",
+    "offscreen",
+    "alarms",
+    "sidePanel",
+    "geolocation"
+  ],
+  "side_panel": {
+    "default_path": "index.html"
+  },
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "http://localhost:8080/*",
+    "ws://localhost:8080/*"
+  ],
+  "background": {
+    "service_worker": "service-worker-loader.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "js": [
+        "assets/youtube.js-loader-C1Wxv3Y1.js"
+      ],
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "SyncCast",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "matches": [
+        "*://*.youtube.com/*"
+      ],
+      "resources": [
+        "src/content/*",
+        "assets/constants-C2qZbf5i.js",
+        "assets/youtube.js-C3ZbS_0f.js"
+      ],
+      "use_dynamic_url": false
+    }
+  ]
+}

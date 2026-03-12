@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    background: #0a0a1a;
+    color: #fff;
+    font-family: 'Inter', system-ui, sans-serif;
+    width: 380px;
+    min-height: 520px;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #7c3aed55; border-radius: 99px; }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl;
+  }
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl font-semibold text-sm
+           bg-gradient-to-r from-violet-600 to-blue-500
+           hover:from-violet-500 hover:to-blue-400
+           active:scale-95 transition-all duration-150 shadow-lg shadow-violet-900/30;
+  }
+  .btn-ghost {
+    @apply flex items-center justify-center gap-2 py-2 px-4 rounded-xl font-medium text-sm
+           border border-white/10 bg-white/5
+           hover:bg-white/10 active:scale-95 transition-all duration-150;
+  }
+  .input {
+    @apply w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm
+           text-white placeholder-white/30 outline-none
+           focus:border-violet-500 focus:ring-1 focus:ring-violet-500/40 transition-all;
+  }
+  .badge {
+    @apply inline-flex items-center gap-1 text-xs font-semibold px-2 py-0.5 rounded-full;
+  }
+}
