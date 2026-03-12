@@ -50,9 +50,10 @@ func main() {
 	go ps.Subscribe(context.Background(), roomHub)
 
 	// ──────────────────────────────────────────
-	// HTTP / Router
+	// HTTP / Router & Production Mode
 	// ──────────────────────────────────────────
-	if cfg.AppEnv == "production" {
+	// Support both "production" and "release" as production environments
+	if cfg.AppEnv == "production" || cfg.AppEnv == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
@@ -84,7 +85,10 @@ func main() {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	go func() {
-		log.Infof("🎧 Listening on %s", srv.Addr)
+		log.Infof("✨ SyncCast engine is live and kicking!")
+		log.Infof("🌍 Base URL: %s", cfg.AppBaseURL)
+		log.Infof("📡 Listening on port %s", cfg.AppPort)
+
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("server error: %v", err)
 		}

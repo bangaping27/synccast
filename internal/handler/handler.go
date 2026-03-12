@@ -146,7 +146,7 @@ func (h *Handler) getVersion(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"version":    "1.0.1",
 		"changelog":  "Mini Chat & Auto-Next added!",
-		"update_url": "http://localhost:8080/api/v1/extension/download",
+		"update_url": h.cfg.AppBaseURL + "/api/v1/extension/download",
 		"required":   false,
 	})
 }

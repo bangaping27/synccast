@@ -32,6 +32,7 @@ type Config struct {
 
 	RoomTTLSeconds int64
 	JWTSecret      string
+	AppBaseURL     string
 }
 
 // Load reads the .env file (if present) and environment variables.
@@ -58,6 +59,7 @@ func Load() *Config {
 
 		RoomTTLSeconds: int64(getEnvInt("ROOM_TTL_SECONDS", 86400)),
 		JWTSecret:      getEnv("JWT_SECRET", "super-secret-change-me"),
+		AppBaseURL:     getEnv("APP_BASE_URL", "http://localhost:8080"),
 	}
 }
 
