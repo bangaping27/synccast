@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "SyncCast — Watch Together",
   "version": "1.0.1",
-  "description": "Watch YouTube together in perfect sync. Part of the Maja Ecosystem.",
+  "description": "Watch YouTube together in perfect sync.",
   "permissions": [
     "tabs",
     "storage",
@@ -28,7 +28,7 @@
   "content_scripts": [
     {
       "js": [
-        "assets/youtube.js-loader-Ctcp4Pwn.js"
+        "assets/youtube.js-loader-CIEmAD-O.js"
       ],
       "matches": [
         "*://*.youtube.com/*"
@@ -60,8 +60,8 @@
       ],
       "resources": [
         "src/content/*",
-        "assets/constants-C_d9O5Em.js",
-        "assets/youtube.js-mzbSioqV.js"
+        "assets/constants-CfgkD9zo.js",
+        "assets/youtube.js-XoTKwVoO.js"
       ],
       "use_dynamic_url": false
     }

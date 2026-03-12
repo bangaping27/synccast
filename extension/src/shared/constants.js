@@ -3,8 +3,8 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Backend ───────────────────────────────────────────────────────────────────
-export const API_BASE = 'http://localhost:8080/api/v1'
-export const WS_BASE  = 'ws://localhost:8080/api/v1'
+export const API_BASE = 'https://synccast.pipihub.id/api/v1'
+export const WS_BASE  = 'wss://synccast.pipihub.id/api/v1'
 export const VERSION  = '1.0.1'
 
 // ── WebSocket event types (mirrors backend events/events.go) ─────────────────
